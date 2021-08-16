@@ -46,4 +46,13 @@ class Calc
 			'date_added' => date('Y-m-d H:i:s.u')
 		];
 	}
+
+	public function update($id, $fromCurrency, $toCurrency, $amount)
+	{
+		$result = $this->calculate($fromCurrency, $toCurrency, $amount);
+		return [
+			'id' => $id,
+			'converted' => $result['converted']
+		];
+	}
 }
