@@ -11,9 +11,10 @@ class Calc
 			$filename = __DIR__ . '/upload/' . date('Y-m-d');
 			$rawList = json_decode($this->getListFromFile($filename) ?? $this->getListFromUrl($filename, $url));
 			foreach ($rawList->Valute as $currencyItem) {
-				$this->listCurrency[] = [
+				$this->listCurrency[$currencyItem->NumCode] = [
 					$currencyItem->NumCode,
-					$currencyItem->Name
+					$currencyItem->Name,
+					$currencyItem->Value
 				];
 			}
 		}
@@ -29,5 +30,20 @@ class Calc
 	{
 		file_put_contents($filename, file_get_contents($url));
 		return $this->getListFromFile($filename);
+	}
+
+	public function calculate($fromCurrency, $toCurrency, $amount)
+	{
+		$list = $this->getListCurrency();
+		$result = $list[$fromCurrency][2] / $list[$toCurrency][2] * $amount;
+		return [
+			'success' => 1,
+			'id' => 1,
+			'from_currency' => $fromCurrency,
+			'to_currency' => $toCurrency,
+			'amount' => $amount,
+			'converted' => $result,
+			'date_added' => date('Y-m-d H:i:s.u')
+		];
 	}
 }
