@@ -55,4 +55,9 @@ class Calc
 			'converted' => $result['converted']
 		];
 	}
+
+	public function delete($id)
+	{
+
+	}
 }
