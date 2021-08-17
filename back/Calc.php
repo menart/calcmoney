@@ -3,6 +3,15 @@
 class Calc
 {
 	private $listCurrency;
+	private $db;
+
+	/**
+	 * @param $listCurrency
+	 */
+	public function __construct($db)
+	{
+		$this->db = $db;
+	}
 
 	public function getListCurrency()
 	{
@@ -32,17 +41,34 @@ class Calc
 		return $this->getListFromFile($filename);
 	}
 
-	public function calculate($fromCurrency, $toCurrency, $amount)
+	public function calculate($fromCurrency, $toCurrency, $amount, $id = 0)
 	{
 		$list = $this->getListCurrency();
-		$result = $list[$fromCurrency][2] / $list[$toCurrency][2] * $amount;
-		return [
-			'success' => 1,
-			'id' => 1,
+		$course = $list[$fromCurrency][2] / $list[$toCurrency][2];
+		$result = round(($course * $amount), 2);
+		$saveData = [
 			'from_currency' => $fromCurrency,
 			'to_currency' => $toCurrency,
 			'amount' => $amount,
+			'course' => round($course, 2),
 			'converted' => $result,
+			'id' => $id
+		];
+		$id = $this->db->save($saveData);
+		return ['id' => $id,
+			'converted' => $result];
+	}
+
+	public function insert($fromCurrency, $toCurrency, $amount)
+	{
+		$result = $this->calculate($fromCurrency, $toCurrency, $amount);
+		return [
+			'success' => 1,
+			'id' => (int)$result['id'],
+			'from_currency' => $fromCurrency,
+			'to_currency' => $toCurrency,
+			'amount' => $amount,
+			'converted' => $result['converted'],
 			'date_added' => date('Y-m-d H:i:s.u')
 		];
 	}
@@ -52,12 +78,20 @@ class Calc
 		$result = $this->calculate($fromCurrency, $toCurrency, $amount);
 		return [
 			'id' => $id,
+			'from_currency' => $fromCurrency,
+			'to_currency' => $toCurrency,
 			'converted' => $result['converted']
 		];
 	}
 
 	public function delete($id)
 	{
+		$saveData = ['id' => $id, 'date_deleted' => 'now()'];
+		$this->db->save($saveData);
+	}
 
+	public function getList()
+	{
+		
 	}
 }
