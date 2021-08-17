@@ -69,13 +69,13 @@ class Calc
 			'to_currency' => $toCurrency,
 			'amount' => $amount,
 			'converted' => $result['converted'],
-			'date_added' => date('Y-m-d H:i:s.u')
+			'date_added' => (new DateTime('NOW'))->format('Y-m-d H:i:s.u')
 		];
 	}
 
 	public function update($id, $fromCurrency, $toCurrency, $amount)
 	{
-		$result = $this->calculate($fromCurrency, $toCurrency, $amount);
+		$result = $this->calculate($fromCurrency, $toCurrency, $amount, $id);
 		return [
 			'id' => $id,
 			'from_currency' => $fromCurrency,
@@ -86,12 +86,12 @@ class Calc
 
 	public function delete($id)
 	{
-		$saveData = ['id' => $id, 'date_deleted' => 'now()'];
+		$saveData = ['date_deleted' => (new DateTime('NOW'))->format('Y-m-d H:i:s.u'), 'id' => $id];
 		$this->db->save($saveData);
 	}
 
 	public function getList()
 	{
-		return $this->db->select(['id', 'from_currency', 'to_currency', 'amount', 'course', 'converted', 'date_added']);
+		return $this->db->select(['id', 'from_currency', 'to_currency', 'amount', 'course', 'converted', 'date_added'],['date_deleted is null']);
 	}
 }

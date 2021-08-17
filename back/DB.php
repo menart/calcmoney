@@ -29,13 +29,15 @@ class DB
 		}
 		$query = $this->db->prepare($sql);
 		$query->execute($valueList);
-
+		var_dump($sql);
 		return $saveData['id'] != 0 ? $saveData['id'] : $this->db->lastInsertId();
 	}
 
-	public function select($listField)
+	public function select($listField,$where = [])
 	{
 		$sql = 'select ' . implode(',', $listField) . ' from ' . self::TABLE_NAME;
+		if(!empty($where))
+			$sql .= ' where '.implode(' and ', $where);
 		$query = $this->db->query($sql,PDO::FETCH_ASSOC );
 		return $query->fetchAll();
 	}
