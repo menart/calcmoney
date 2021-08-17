@@ -32,4 +32,11 @@ class DB
 
 		return $saveData['id'] != 0 ? $saveData['id'] : $this->db->lastInsertId();
 	}
+
+	public function select($listField)
+	{
+		$sql = 'select ' . implode(',', $listField) . ' from ' . self::TABLE_NAME;
+		$query = $this->db->query($sql,PDO::FETCH_ASSOC );
+		return $query->fetchAll();
+	}
 }

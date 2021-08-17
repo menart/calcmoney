@@ -92,6 +92,6 @@ class Calc
 
 	public function getList()
 	{
-		
+		return $this->db->select(['id', 'from_currency', 'to_currency', 'amount', 'course', 'converted', 'date_added']);
 	}
 }
