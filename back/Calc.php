@@ -59,8 +59,16 @@ class Calc
 			'converted' => $result];
 	}
 
+	public function verifyInsert($data)
+	{
+		return $data->amount > 0 ? ['success' => 0,
+			'message' => empty($data) ? 'пустой запрос' : 'Отрицательная сумма'
+		] : null;
+	}
+
 	public function insert($fromCurrency, $toCurrency, $amount)
 	{
+
 		$result = $this->calculate($fromCurrency, $toCurrency, $amount);
 		return [
 			'success' => 1,
@@ -87,6 +95,7 @@ class Calc
 	public function delete($id)
 	{
 		$saveData = ['date_deleted' => (new DateTime('NOW'))->format('Y-m-d H:i:s.u'), 'id' => $id];
+		if (count($this->db->select(['id'], ['date_deleted is not null', 'id =' . $id])) > 0) return false;
 		$this->db->save($saveData);
 	}
 
@@ -94,4 +103,5 @@ class Calc
 	{
 		return $this->db->select(['id', 'from_currency', 'to_currency', 'amount', 'course', 'converted', 'date_added'],['date_deleted is null']);
 	}
+
 }

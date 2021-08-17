@@ -28,7 +28,6 @@ class DB
 		}
 		$query = $this->db->prepare($sql);
 		$query->execute($valueList);
-		var_dump($sql);
 		return $saveData['id'] != 0 ? $saveData['id'] : $this->db->lastInsertId();
 	}
 
