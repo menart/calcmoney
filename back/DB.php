@@ -5,9 +5,8 @@ class DB
 	const TABLE_NAME = 'public.conversions';
 	private $db;
 
-	public function __construct()
+	public function __construct($dsn)
 	{
-		$dsn = 'pgsql:dbname=testdb;user=testuser;password=testpassword;host=db';
 		$this->db = new PDO($dsn);
 	}
 
