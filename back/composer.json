@@ -1,0 +1,17 @@
+{
+  "name": "vendor_name/back",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "menart",
+      "email": "email@example.com"
+    }
+  ],
+  "require": {
+  },
+  "autoload": {
+    "/": "app/"
+  }
+}
